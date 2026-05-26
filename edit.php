@@ -2,72 +2,66 @@
 
 $id = $_GET['id'];
 
-$stmt = $conn->prepare("SELECT * FROM customer_raw WHERE id = :id");
+$stmt = $conn->prepare("SELECT * FROM customer_masterlist WHERE CustomerID = :id");
 $stmt->execute([':id' => $id]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $id = $_POST['id'];
-        $LastName = $_POST['LastName'];
-        $FirstName = $_POST['FirstName'];
-        $MiddleName = $_POST['MiddleName'];
-        $DateOfBirth = $_POST['DateOfBirth'];
-        $AddressLine01 = $_POST['AddressLine01'];
-        $AddressLine02 = $_POST['AddressLine02'];
-        $Barangay = $_POST['Barangay'];
-        $Province = $_POST['Province'];
-        $city = $_POST['City'];
-        $Region = $_POST['Region'];
-        $Email = $_POST['Email'];
+    $Title = $_POST['title'];
+    $FirstName = $_POST['firstname'];
+    $MiddleName = $_POST['middlename'];
+    $LastName = $_POST['lastname'];
+    $SuffixName = $_POST['suffix'];
+    $DateOfBirth = $_POST['dob'];
+    $AddressLine01 = $_POST['address1'];
+    $AddressLine02 = $_POST['address2'];
+    $Barangay = $_POST['barangay'];
+    $City = $_POST['city'];
+    $Province = $_POST['province'];
+    $Region = $_POST['region'];
+    $Contact = $_POST['contact'];
+    $Email = $_POST['email'];
+    $Status = $_POST['status'];
 
-    $stmt = $conn->prepare("UPDATE customer_raw SET WHERE id=:id");
+    $sql = "UPDATE customer_masterlist SET 
+            Title = :Title, 
+            FirstName = :FirstName, 
+            MiddleName = :MiddleName, 
+            LastName = :LastName, 
+            SuffixName = :SuffixName, 
+            DateOfBirth = :DateOfBirth, 
+            AddressLine01 = :AddressLine01, 
+            AddressLine02 = :AddressLine02, 
+            Barangay = :Barangay, 
+            City = :City, 
+            Province = :Province, 
+            Region = :Region, 
+            Contact = :Contact, 
+            Email = :Email, 
+            cStatus = :Status 
+            WHERE CustomerID = :id";
+
+    $stmt = $conn->prepare($sql);
     $stmt->execute([
         ':Title' => $Title,
         ':LastName' => $LastName,
         ':FirstName' => $FirstName,
         ':MiddleName' => $MiddleName,
+        ':SuffixName' => $SuffixName,
         ':DateOfBirth' => $DateOfBirth,
         ':AddressLine01' => $AddressLine01,
         ':AddressLine02' => $AddressLine02,
         ':Barangay' => $Barangay,
         ':Province' => $Province,
-        ':City' => $city,
+        ':City' => $City,
         ':Region' => $Region,
-        ':Email' => $Email
-        ]);
+        ':Contact' => $Contact,
+        ':Email' => $Email,
+        ':Status' => $Status,
+        ':id' => $id
+    ]);
 
     header("Location: index.php");
+    exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<style> .form-control { margin-bottom: 10px; } </style>
-</head>
-
-<body class="container mt-4" style="background-color:darkgray ; max-width: 800px;margin-bottom: 10px;">
-
-<h2 style="font-weight:bold;text-align:center; max-width: 800px;margin-bottom: 10px;">Edit Customer Information</h2>
-
-<form method="POST" style="margin-bottom: 10px;">
-    <input name="title" class="form-control" placeholder="Title">
-    <input name="firstname" class="form-control" placeholder="First Name" required>
-    <input name="middlename" class="form-control" placeholder="Middle Name">
-    <input name="lastname" class="form-control" placeholder="Last Name" required>
-    <input name="suffix" class="form-control" placeholder="Suffix (e.g. Jr.)">
-    <input name="dob" type="date" class="form-control" placeholder="yyyy/mm/dd">
-    <input name="address1" class="form-control" placeholder="Address Line 1" required>
-    <input name="address2" class="form-control" placeholder="Address Line 2">
-    <input name="barangay" class="form-control" placeholder="Barangay">
-    <input name="city" class="form-control" placeholder="City" required>
-    <input name="province" class="form-control" placeholder="Province">
-    <input name="region" class="form-control" placeholder="Region">
-    <input name="contact" class="form-control" placeholder="Contact">
-    <input name="email" type="email" class="form-control" placeholder="Email">
-    <button class="btn btn-warning">Update</button>
-</form>
-
-</body>
-</html>
